@@ -40,6 +40,14 @@ class UsersMetas
         $this->resultSetPrototype->setArrayObjectPrototype(new UserMeta($relatedTables));
     }
     
+    /**
+     * This function returns the value of a specific metakey pertaining to 
+     * the user whose ID is passed via the userid parameter.
+     *
+     * @param int    $user_id    The ID of the user whose data should be retrieved.
+     * @param string $metakey    The metakey value to be returned.
+     * @return string
+     */
     public function getUserMeta($user_id, $metakey)
     {
     	$user_id = (int)$user_id;

@@ -146,6 +146,13 @@ class User
     	return null;
     }
     
+    /**
+     * This function returns the value of a specific metakey pertaining to 
+     * the current user.
+     *
+     * @param string $metakey    The metakey value to be returned.
+     * @return string
+     */
     public function getUserMeta($metakey)
     {
     	if (isset($this->relatedTables[UserMeta::TABLE_NAME])) {
