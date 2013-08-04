@@ -35,9 +35,6 @@ class Posts
 	 */
 	protected $adapter;
 	
-	protected $tablename = 'blog_posts';
-	
-	private $_users;
 	
 	/**
      * @var ResultSetInterface
@@ -81,7 +78,7 @@ class Posts
 
   
     	
-    	$sql = new Sql($this->adapter, $this->tablename);
+    	$sql = new Sql($this->adapter, Post::TABLE_NAME);
     	$select = $sql->select();
     	$select->where(array('post_type' => $args['post_type']));
     	$select->where(array('post_status' => $args['post_status']), PredicateSet::OP_AND);
@@ -118,7 +115,7 @@ class Posts
     {
         $id  = (int) $id;
         
-        $sql = new Sql($this->adapter, $this->tablename);
+        $sql = new Sql($this->adapter, Post::TABLE_NAME);
     	$select = $sql->select();
     	$select->where(array('ID' => $id));
     	

@@ -32,7 +32,6 @@ class Users
 	 */
 	protected $adapter;
 	
-	protected $tablename = 'blog_users';
 	
 	/**
      * @var ResultSetInterface
@@ -53,7 +52,7 @@ class Users
      */
     public function getUserBy( $field, $value )
     {
-    	$sql = new Sql($this->adapter, $this->tablename);
+    	$sql = new Sql($this->adapter, User::TABLE_NAME);
     	$select = $sql->select();
     	
     	switch ($field)

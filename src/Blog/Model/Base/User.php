@@ -95,19 +95,24 @@ class User
 	public function __get($name)
     {
     	switch ($name) {
-    		case 'id';
+    		case 'id':
+    		case 'ID':
     			return $this->_fields['ID'];
     			break;
     		case 'login':
+    		case 'user_login':
     			return $this->_fields['user_login'];
     			break;
     		case 'password':
+    		case 'user_pass':
     			return $this->_fields['user_pass'];
     			break;
     		case 'nicename':
+    		case 'user_nicename':
     			return $this->_fields['user_nicename'];
     			break;
     		case 'email':
+    		case 'user_email':
     			return $this->_fields['user_email'];
     			break;
     		case 'url':
@@ -115,12 +120,15 @@ class User
     			return $this->_fields['user_url'];
     			break;
     		case 'registered':
+    		case 'user_registered':
     			return $this->_fields['user_registered'];
     			break;
     		case 'activation_key':
+    		case 'user_activation_key':
     			return $this->_fields['user_activation_key'];
     			break;
     		case 'status':
+    		case 'user_status':
     			return $this->_fields['user_status'];
     			break;
     		case 'display_name':

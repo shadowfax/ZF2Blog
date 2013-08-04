@@ -39,10 +39,10 @@ class Blog implements ServiceManagerAwareInterface
 	protected $adapter;
 	
 	private $_tableGateways = array(
-		'blog_options' => null,
-		'blog_posts'   => null,
-		'blog_users'   => null,
-		'blog_usermeta' => null,
+		Option::TABLE_NAME   => null,
+		Post::TABLE_NAME     => null,
+		User::TABLE_NAME     => null,
+		UserMeta::TABLE_NAME => null,
 	);
 	
 	
@@ -67,7 +67,7 @@ class Blog implements ServiceManagerAwareInterface
      */
     public function getPosts( $args = array() )
     {
-    	$posts = $this->getTableGateway('blog_posts');
+    	$posts = $this->getTableGateway(Post::TABLE_NAME);
     	return $posts->getPosts($args);
     }
     
@@ -76,7 +76,7 @@ class Blog implements ServiceManagerAwareInterface
      */
     public function getUserBy( $field, $value )
     {
-    	$users = $this->getTableGateway('blog_users');
+    	$users = $this->getTableGateway(User::TABLE_NAME);
     	return $users->getUserBy($field, $value);
     }
     
