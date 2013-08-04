@@ -45,12 +45,11 @@ class Posts
     protected $resultSetPrototype = null;
 	
 
-    public function __construct(Adapter $adapter, ServiceManager $serviceManager)
+    public function __construct(Adapter $adapter, $relatedTables = array())
     {
-    	$this->serviceManager = $serviceManager;
         $this->adapter = $adapter;
         $this->resultSetPrototype = new ResultSet();
-        $this->resultSetPrototype->setArrayObjectPrototype(new Post($serviceManager));
+        $this->resultSetPrototype->setArrayObjectPrototype(new Post($relatedTables));
     }
    
     public function getPosts( $args = array() )

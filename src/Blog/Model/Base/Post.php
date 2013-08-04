@@ -9,20 +9,36 @@
 
 namespace Blog\Model\Base;
 
-
-use Zend\ServiceManager\ServiceManager;
-
-
+use Blog\Model\Base\User;
+use Blog\Model\Users;
 
 class Post
 {
-    
-	private $_serviceManager;
+    /**
+	 * Table name
+	 * 
+	 * @var string
+	 */
+	const TABLE_NAME = 'blog_posts';
+	
+	/**
+	 * Related tables
+	 * 
+	 * @var array
+	 */
+	private $relatedTables = array();
 	
 	
-	public function __construct(ServiceManager $serviceManager)
+	/**
+	 * Author data
+	 * 
+	 * @var User
+	 */
+	private $_author;
+	
+	public function __construct($relatedTables = array())
 	{
-		$this->_serviceManager = $serviceManager;
+		$this->relatedTables = $relatedTables;
 	}
 	
     protected $_fields = array(
@@ -166,13 +182,7 @@ class Post
     	
     	switch ($name) {
     		case 'author':
-    			if ($this->_fields['post_author'] !== 0) {
-	    			$blog = $this->_serviceManager->get('Blog');
-	    			$author = $blog->getUserBy('id', $this->_fields['post_author'] );
-    			} else {
-    				$author = new User();
-    			}
-	    		return $author;
+    			return $this->_fields['post_author'];
     			break;
     		case 'date':
     			return $this->_fields['post_date'];
@@ -244,6 +254,64 @@ class Post
     	
     	return null;
     }
+    
+    /**
+     * Retrieves the post's author object
+     * 
+     * @return User
+     * @throws \Exception
+     */
+    protected function __getAuthor()
+    {
+    	if (is_null($this->_author)) {
+    		if (isset($this->relatedTables[User::TABLE_NAME])) {
+    			$this->_author = $this->relatedTables[User::TABLE_NAME]->getUserBy('id', $this->_fields['post_author']);
+    			if (empty($this->_author)) {
+    				throw new \Exception('No author found for this post');
+    			}
+    		} else {
+    			throw new \Exception('No user table has been defined for posts');
+    		}
+    	}
+    	
+    	return $this->_author;
+    }
+    
+    /**
+     * Retrieve the post author.
+     * 
+     * @return String
+     */
+    public function getTheAuthor()
+    {
+    	return $this->__getAuthor()->display_name;
+    }
+    
+    /**
+     * This tag returns a link to the Website for the author of a post.
+     * The Website field is set in the user's profile. The text for the 
+     * link is the author's Profile Display name publicly as field. 
+     * This tag must be used within The Loop.
+	 *
+	 * get_the_author_link() returns the link for use in PHP. To display 
+	 * the link instead, use the_author_link().
+     *
+     * @return String
+     */
+    public function getTheAuthorLink()
+    {
+    	$url = $this->__getAuthor()->getUserMeta($this->_fields['post_author'], 'url');
+    	if (empty($url)) {
+    		$url = $this->__getAuthor()->user_url;
+    		if (empty($url)) {
+    			return $this->__getAuthor()->display_name;
+    		}
+    	} else {
+    		return '<a href="' . $url . '" rel="external nofollow">' . $this->__getAuthor()->display_name . '</a>';
+    	}
+    }
+    
+    
     
     public function commentsAllowed()
     {

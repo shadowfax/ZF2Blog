@@ -13,6 +13,20 @@ namespace Blog\Model\Base;
 
 class User
 {
+	/**
+	 * Table name
+	 * 
+	 * @var string
+	 */
+	const TABLE_NAME = 'blog_users';
+	
+	/**
+	 * Related tables
+	 * 
+	 * @var array
+	 */
+	private $relatedTables = array();
+	
 	protected $_fields = array(
 		'ID'                  => 0,
 		'user_login'          => null,
@@ -26,6 +40,11 @@ class User
 		'display_name'        => null,
 	);
 
+	public function __construct($relatedTables = array())
+	{
+		$this->relatedTables = $relatedTables;
+	}
+	
     public function exchangeArray($data)
     {
         $this->_fields['ID']                  = (!empty($data['ID'])) ? $data['ID'] : 0;
@@ -92,6 +111,7 @@ class User
     			return $this->_fields['user_email'];
     			break;
     		case 'url':
+    		case 'user_url':
     			return $this->_fields['user_url'];
     			break;
     		case 'registered':
@@ -118,5 +138,12 @@ class User
     	return null;
     }
     
-    
+    public function getUserMeta($metakey)
+    {
+    	if (isset($this->relatedTables[UserMeta::TABLE_NAME])) {
+    		return $this->relatedTables[UserMeta::TABLE_NAME]->getUserMeta($this->_fields['ID'], $metakey);
+    	} else {
+    		throw new \Exception('No meta table has been defined for users');
+    	}
+    }
 }

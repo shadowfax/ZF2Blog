@@ -11,6 +11,13 @@ namespace Blog\Model\Base;
 
 class Option
 {
+	/**
+	 * Table name
+	 * 
+	 * @var string
+	 */
+	const TABLE_NAME = 'blog_options';
+	
     public $option_id;
     public $option_name;
     public $option_value;

@@ -3,5 +3,5 @@
 <?php foreach($this->posts as $post) : ?>
 
 	<h2><?php echo $post->title; ?></h2>
-	<h3><?php echo $post->author->display_name; ?></h3>
+	<h3><?php echo $post->getTheAuthorLink(); ?></h3>
 <?php endforeach; ?>

@@ -39,11 +39,11 @@ class Users
      */
     protected $resultSetPrototype = null;
     
-	public function __construct(Adapter $adapter)
+	public function __construct(Adapter $adapter, $relatedTables = array())
     {
         $this->adapter = $adapter;
         $this->resultSetPrototype = new ResultSet();
-        $this->resultSetPrototype->setArrayObjectPrototype(new User());
+        $this->resultSetPrototype->setArrayObjectPrototype(new User($relatedTables));
     }
     
     /**
@@ -87,6 +87,7 @@ class Users
         	return new User();
         }
     }
+    
     
     /**
      * Save a user into the database.

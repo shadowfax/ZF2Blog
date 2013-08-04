@@ -12,6 +12,10 @@
 
 namespace Blog\Service;
 
+use Blog\Model\UsersMetas;
+
+use Blog\Model\Base\UserMeta;
+
 use Blog\Model\Users;
 
 use Zend\Db\TableGateway\TableGateway;
@@ -38,6 +42,7 @@ class Blog implements ServiceManagerAwareInterface
 		'blog_options' => null,
 		'blog_posts'   => null,
 		'blog_users'   => null,
+		'blog_usermeta' => null,
 	);
 	
 	
@@ -82,16 +87,26 @@ class Blog implements ServiceManagerAwareInterface
     	if (is_null($this->_tableGateways[$name])) {
     	
 	        switch($name) {
-	        	case 'blog_options':
+	        	case Option::TABLE_NAME:
 	        		
 	        		break;
-	        	case 'blog_posts':
-	        		$this->_tableGateways[$name] = new Posts($this->adapter, $this->serviceManager);
-	        		break;
-	        	case 'blog_users':
-	        		$this->_tableGateways[$name] = new Users($this->adapter, $this->serviceManager);
-	        		break;
+	        	case Post::TABLE_NAME:
+	        		$relatedTables = array(
+	        			User::TABLE_NAME => $this->getTableGateway(User::TABLE_NAME)
+	        		);
 	        		
+	        		$this->_tableGateways[$name] = new Posts($this->adapter, $relatedTables);
+	        		break;
+	        	case User::TABLE_NAME:
+	        		$relatedTables = array(
+	        			UserMeta::TABLE_NAME => $this->getTableGateway(UserMeta::TABLE_NAME)
+	        		);
+	        		
+	        		$this->_tableGateways[$name] = new Users($this->adapter, $relatedTables);
+	        		break;
+	        	case UserMeta::TABLE_NAME:
+	        		$this->_tableGateways[$name] = new UsersMetas($this->adapter);
+	        		break;
 	        }
     	}
     	
